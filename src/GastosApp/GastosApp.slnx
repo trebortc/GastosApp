@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="../../tests/GastosApp.UnitTests/GastosApp.UnitTests.csproj" />
+  <Project Path="GastosApp.Api/GastosApp.Api.csproj" />
+  <Project Path="GastosApp.Application/GastosApp.Application.csproj" />
+  <Project Path="GastosApp.Domain/GastosApp.Domain.csproj" />
+  <Project Path="GastosApp.Infrastructure/GastosApp.Infrastructure.csproj" />
+  <Project Path="GastosApp.Mobile/GastosApp.Mobile.csproj" />
+</Solution>

@@ -1,4 +1,6 @@
+using GastosApp.Application.Authentication;
 using GastosApp.Application.Common;
+using GastosApp.Infrastructure.Authentication;
 using GastosApp.Infrastructure.Identity;
 using GastosApp.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
@@ -36,6 +38,8 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork>(sp =>
             sp.GetRequiredService<AppDbContext>());
+
+        services.AddSingleton<IJwtTokenService, JwtTokenService>();
 
         services.AddIdentityCore<ApplicationUser>(options =>
             {

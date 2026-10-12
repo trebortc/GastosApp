@@ -1,10 +1,16 @@
-﻿namespace GastosApp.Mobile
+﻿using GastosApp.Mobile.Views;
+
+namespace GastosApp.Mobile;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+
+        // Rutas modales / de detalle (no en tab bar)
+        Routing.RegisterRoute("register",      typeof(RegisterPage));
+        Routing.RegisterRoute("expensedetail", typeof(ExpenseDetailPage));
     }
 }
+

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="GastosApp.Mobile.Views.ExpenseDetailPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:GastosApp.Mobile.ViewModels"
+    xmlns:enums="clr-namespace:GastosApp.Domain.Enums;assembly=GastosApp.Domain"
+    x:DataType="vm:ExpenseDetailViewModel"
+    BackgroundColor="{AppThemeBinding Light={StaticResource PageBackground}, Dark={StaticResource PageBackgroundDark}}">
+
+    <Shell.TitleView>
+        <Label
+            Text="{Binding IsEditMode, Converter={StaticResource BoolToStringConverter},
+                   ConverterParameter='Editar gasto|Nuevo gasto'}"
+            Style="{StaticResource NavTitleStyle}" />
+    </Shell.TitleView>
+
+    <Shell.ToolbarItems>
+        <ToolbarItem Text="Guardar" Command="{Binding SaveCommand}" />
+    </Shell.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="0">
+
+            <Label Text="Descripcion" Style="{StaticResource FieldLabelStyle}" />
+            <Entry
+                Text="{Binding Description}"
+                Placeholder="Ej: Supermercado, renta, etc."
+                Style="{StaticResource EntryStyle}"
+                Margin="0,4,0,16" />
+
+            <Label Text="Importe" Style="{StaticResource FieldLabelStyle}" />
+            <Entry
+                Text="{Binding Amount}"
+                Keyboard="Numeric"
+                Placeholder="0.00"
+                Style="{StaticResource EntryStyle}"
+                Margin="0,4,0,16" />
+
+            <Label Text="Moneda" Style="{StaticResource FieldLabelStyle}" />
+            <Picker
+                Title="Moneda"
+                SelectedItem="{Binding Currency}"
+                Style="{StaticResource PickerStyle}"
+                Margin="0,4,0,16">
+                <Picker.Items>
+                    <x:String>MXN</x:String>
+                    <x:String>USD</x:String>
+                    <x:String>EUR</x:String>
+                    <x:String>COP</x:String>
+                    <x:String>ARS</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Label Text="Tipo" Style="{StaticResource FieldLabelStyle}" />
+            <Picker
+                Title="Tipo de movimiento"
+                SelectedItem="{Binding Type}"
+                Style="{StaticResource PickerStyle}"
+                Margin="0,4,0,16">
+                <Picker.Items>
+                    <x:String>Expense</x:String>
+                    <x:String>Income</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Label Text="Fecha" Style="{StaticResource FieldLabelStyle}" />
+            <DatePicker
+                Date="{Binding OccurredAt}"
+                Format="dd/MM/yyyy"
+                Margin="0,4,0,16" />
+
+            <!-- Error -->
+            <Label
+                Text="{Binding ErrorMessage}"
+                Style="{StaticResource ErrorLabelStyle}"
+                IsVisible="{Binding ErrorMessage, Converter={StaticResource NotNullBoolConverter}}"
+                Margin="0,0,0,8" />
+
+            <ActivityIndicator
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                Color="{StaticResource Primary}"
+                Margin="0,8" />
+
+            <Button
+                Text="Cancelar"
+                Command="{Binding CancelCommand}"
+                Style="{StaticResource SecondaryButtonStyle}"
+                Margin="0,8,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

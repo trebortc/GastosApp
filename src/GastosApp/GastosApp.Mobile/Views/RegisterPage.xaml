@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="GastosApp.Mobile.Views.RegisterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:GastosApp.Mobile.ViewModels"
+    x:DataType="vm:RegisterViewModel"
+    Title="Crear cuenta"
+    BackgroundColor="{AppThemeBinding Light={StaticResource PageBackground}, Dark={StaticResource PageBackgroundDark}}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="32,24" Spacing="0">
+
+            <Label
+                Text="Crea tu cuenta"
+                Style="{StaticResource HeadlineStyle}"
+                Margin="0,0,0,32" />
+
+            <Label Text="Nombre completo" Style="{StaticResource FieldLabelStyle}" />
+            <Entry
+                Text="{Binding DisplayName}"
+                Placeholder="Tu nombre"
+                Style="{StaticResource EntryStyle}"
+                Margin="0,4,0,16" />
+
+            <Label Text="Correo electronico" Style="{StaticResource FieldLabelStyle}" />
+            <Entry
+                Text="{Binding Email}"
+                Placeholder="ejemplo@correo.com"
+                Keyboard="Email"
+                Style="{StaticResource EntryStyle}"
+                Margin="0,4,0,16" />
+
+            <Label Text="Contrasena" Style="{StaticResource FieldLabelStyle}" />
+            <Entry
+                Text="{Binding Password}"
+                Placeholder="Minimo 8 caracteres"
+                IsPassword="True"
+                Style="{StaticResource EntryStyle}"
+                Margin="0,4,0,16" />
+
+            <Label Text="Moneda preferida" Style="{StaticResource FieldLabelStyle}" />
+            <Picker
+                Title="Selecciona moneda"
+                SelectedItem="{Binding Currency}"
+                Style="{StaticResource PickerStyle}"
+                Margin="0,4,0,0">
+                <Picker.Items>
+                    <x:String>MXN</x:String>
+                    <x:String>USD</x:String>
+                    <x:String>EUR</x:String>
+                    <x:String>COP</x:String>
+                    <x:String>ARS</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <!-- Error -->
+            <Label
+                Text="{Binding ErrorMessage}"
+                Style="{StaticResource ErrorLabelStyle}"
+                IsVisible="{Binding ErrorMessage, Converter={StaticResource NotNullBoolConverter}}"
+                Margin="0,8,0,0" />
+
+            <Button
+                Text="Crear cuenta"
+                Command="{Binding RegisterCommand}"
+                Style="{StaticResource PrimaryButtonStyle}"
+                Margin="0,24,0,0" />
+
+            <ActivityIndicator
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                Color="{StaticResource Primary}"
+                Margin="0,8" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

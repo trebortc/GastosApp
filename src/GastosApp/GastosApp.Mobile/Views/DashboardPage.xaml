@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="GastosApp.Mobile.Views.DashboardPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:GastosApp.Mobile.ViewModels"
+    xmlns:dto="clr-namespace:GastosApp.Application.Reports;assembly=GastosApp.Application"
+    x:DataType="vm:DashboardViewModel"
+    Title="Resumen"
+    BackgroundColor="{AppThemeBinding Light={StaticResource PageBackground}, Dark={StaticResource PageBackgroundDark}}">
+
+    <Shell.ToolbarItems>
+        <ToolbarItem Text="Salir" Command="{Binding LogoutCommand}" Order="Secondary" />
+    </Shell.ToolbarItems>
+
+    <RefreshView Command="{Binding LoadCommand}" IsRefreshing="{Binding IsBusy}">
+        <ScrollView>
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <!-- Tarjetas de totales -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                    <!-- Ingresos -->
+                    <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Ingresos" Style="{StaticResource CardLabelStyle}" />
+                            <Label Text="{Binding TotalIncome, StringFormat='{0:N2}'}"
+                                   Style="{StaticResource IncomeAmountStyle}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <!-- Gastos -->
+                    <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Gastos" Style="{StaticResource CardLabelStyle}" />
+                            <Label Text="{Binding TotalExpenses, StringFormat='{0:N2}'}"
+                                   Style="{StaticResource ExpenseAmountStyle}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <!-- Balance -->
+                    <Border Grid.Column="2" Style="{StaticResource CardStyle}">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Balance" Style="{StaticResource CardLabelStyle}" />
+                            <Label Text="{Binding Balance, StringFormat='{0:N2}'}"
+                                   Style="{StaticResource BalanceAmountStyle}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Error -->
+                <Label
+                    Text="{Binding ErrorMessage}"
+                    Style="{StaticResource ErrorLabelStyle}"
+                    IsVisible="{Binding ErrorMessage, Converter={StaticResource NotNullBoolConverter}}" />
+
+                <!-- Por categoria -->
+                <Label Text="Por categoria" Style="{StaticResource SectionHeaderStyle}" />
+
+                <CollectionView ItemsSource="{Binding CategoryBreakdown}" HeightRequest="200">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dto:CategorySummaryDto">
+                            <Grid ColumnDefinitions="*,Auto,80" Padding="0,6" ColumnSpacing="8">
+                                <Label Grid.Column="0" Text="{Binding CategoryName}"
+                                       Style="{StaticResource BodyStyle}" VerticalOptions="Center" />
+                                <Label Grid.Column="1" Text="{Binding Amount, StringFormat='{0:N2}'}"
+                                       Style="{StaticResource ExpenseAmountStyle}" VerticalOptions="Center" />
+                                <ProgressBar Grid.Column="2"
+                                             Progress="{Binding Percentage, Converter={StaticResource DivideBy100Converter}}"
+                                             ProgressColor="{StaticResource Primary}"
+                                             VerticalOptions="Center" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Historial mensual -->
+                <Label Text="Historial mensual" Style="{StaticResource SectionHeaderStyle}" />
+
+                <CollectionView ItemsSource="{Binding MonthlySummaries}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dto:MonthlySummaryDto">
+                            <Border Style="{StaticResource CardStyle}" Margin="0,4">
+                                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+                                    <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="0">
+                                        <Label Text="{Binding Year}" Style="{StaticResource CaptionStyle}" />
+                                        <Label Text="{Binding Month}" Style="{StaticResource BodyStyle}" />
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Expenses, StringFormat='-{0:N2}'}"
+                                           Style="{StaticResource ExpenseAmountStyle}" VerticalOptions="Center" />
+                                    <Label Grid.Column="2"
+                                           Text="{Binding Net, StringFormat='{0:N2}'}"
+                                           Style="{StaticResource BalanceAmountStyle}" VerticalOptions="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Acceso rapido a gastos -->
+                <Button
+                    Text="Ver mis gastos"
+                    Command="{Binding GoToExpensesCommand}"
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    Margin="0,8,0,0" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+
+</ContentPage>

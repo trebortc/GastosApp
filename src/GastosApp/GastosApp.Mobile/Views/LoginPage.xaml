@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="GastosApp.Mobile.Views.LoginPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:GastosApp.Mobile.ViewModels"
+    x:DataType="vm:LoginViewModel"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{AppThemeBinding Light={StaticResource PageBackground}, Dark={StaticResource PageBackgroundDark}}">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="32,60,32,32"
+            Spacing="0"
+            VerticalOptions="Center">
+
+            <!-- Logo / marca -->
+            <Label
+                Text="GastosApp"
+                Style="{StaticResource HeadlineStyle}"
+                HorizontalOptions="Center"
+                Margin="0,0,0,8" />
+
+            <Label
+                Text="Controla tus finanzas personales"
+                Style="{StaticResource SubtitleStyle}"
+                HorizontalOptions="Center"
+                Margin="0,0,0,48" />
+
+            <!-- Formulario -->
+            <Label Text="Correo electronico" Style="{StaticResource FieldLabelStyle}" />
+            <Entry
+                Text="{Binding Email}"
+                Placeholder="ejemplo@correo.com"
+                Keyboard="Email"
+                Style="{StaticResource EntryStyle}"
+                Margin="0,4,0,16" />
+
+            <Label Text="Contrasena" Style="{StaticResource FieldLabelStyle}" />
+            <Entry
+                Text="{Binding Password}"
+                Placeholder="Minimo 8 caracteres"
+                IsPassword="True"
+                Style="{StaticResource EntryStyle}"
+                Margin="0,4,0,8" />
+
+            <!-- Error -->
+            <Label
+                Text="{Binding ErrorMessage}"
+                Style="{StaticResource ErrorLabelStyle}"
+                IsVisible="{Binding ErrorMessage, Converter={StaticResource NotNullBoolConverter}}"
+                Margin="0,0,0,16" />
+
+            <!-- Botones -->
+            <Button
+                Text="Iniciar sesion"
+                Command="{Binding LoginCommand}"
+                Style="{StaticResource PrimaryButtonStyle}"
+                Margin="0,16,0,0" />
+
+            <ActivityIndicator
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                Color="{StaticResource Primary}"
+                Margin="0,8" />
+
+            <HorizontalStackLayout
+                HorizontalOptions="Center"
+                Spacing="4"
+                Margin="0,24,0,0">
+                <Label Text="No tienes cuenta?" Style="{StaticResource SubtitleStyle}" />
+                <Label
+                    Text="Registrate"
+                    Style="{StaticResource LinkLabelStyle}">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToRegisterCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

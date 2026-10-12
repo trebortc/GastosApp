@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="GastosApp.Mobile.Views.ExpensesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:GastosApp.Mobile.ViewModels"
+    xmlns:dto="clr-namespace:GastosApp.Application.Expenses;assembly=GastosApp.Application"
+    x:DataType="vm:ExpensesViewModel"
+    Title="Mis gastos"
+    BackgroundColor="{AppThemeBinding Light={StaticResource PageBackground}, Dark={StaticResource PageBackgroundDark}}">
+
+    <Shell.ToolbarItems>
+        <ToolbarItem Text="Nuevo" Command="{Binding AddExpenseCommand}" />
+    </Shell.ToolbarItems>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Barra de busqueda -->
+        <SearchBar
+            Grid.Row="0"
+            Placeholder="Buscar gastos..."
+            Text="{Binding SearchText}"
+            SearchCommand="{Binding LoadCommand}"
+            Margin="8,8,8,0" />
+
+        <RefreshView
+            Grid.Row="1"
+            Command="{Binding LoadCommand}"
+            IsRefreshing="{Binding IsBusy}">
+
+            <CollectionView
+                ItemsSource="{Binding Expenses}"
+                RemainingItemsThreshold="5"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="8">
+                        <Label Text="No hay gastos registrados" Style="{StaticResource SubtitleStyle}" />
+                        <Button Text="Agregar el primero" Command="{Binding AddExpenseCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="dto:ExpenseDto">
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem
+                                        Text="Eliminar"
+                                        BackgroundColor="{StaticResource ErrorColor}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ExpensesViewModel}}, Path=DeleteExpenseCommand}"
+                                        CommandParameter="{Binding}" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+
+                            <Border Style="{StaticResource CardStyle}" Margin="8,4">
+                                <Grid
+                                    ColumnDefinitions="*,Auto"
+                                    RowDefinitions="Auto,Auto"
+                                    RowSpacing="2"
+                                    ColumnSpacing="8">
+
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ExpensesViewModel}}, Path=OpenExpenseCommand}"
+                                            CommandParameter="{Binding}" />
+                                    </Grid.GestureRecognizers>
+
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding Description}"
+                                           Style="{StaticResource BodyStyle}"
+                                           LineBreakMode="TailTruncation" />
+
+                                    <Label Grid.Row="0" Grid.Column="1"
+                                           Text="{Binding Amount, StringFormat='{0:N2}'}"
+                                           Style="{StaticResource ExpenseAmountStyle}"
+                                           VerticalOptions="Center" />
+
+                                    <Label Grid.Row="1" Grid.Column="0"
+                                           Text="{Binding CategoryName}"
+                                           Style="{StaticResource CaptionStyle}" />
+
+                                    <Label Grid.Row="1" Grid.Column="1"
+                                           Text="{Binding OccurredAt, StringFormat='{0:dd/MM/yy}'}"
+                                           Style="{StaticResource CaptionStyle}"
+                                           HorizontalOptions="End" />
+                                </Grid>
+                            </Border>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.Footer>
+                    <ActivityIndicator
+                        IsRunning="{Binding IsBusy}"
+                        IsVisible="{Binding HasMore}"
+                        Color="{StaticResource Primary}"
+                        Margin="0,8" />
+                </CollectionView.Footer>
+
+            </CollectionView>
+        </RefreshView>
+
+        <!-- Error -->
+        <Label
+            Grid.Row="1"
+            Text="{Binding ErrorMessage}"
+            Style="{StaticResource ErrorLabelStyle}"
+            IsVisible="{Binding ErrorMessage, Converter={StaticResource NotNullBoolConverter}}"
+            VerticalOptions="End"
+            Margin="16" />
+
+    </Grid>
+
+</ContentPage>

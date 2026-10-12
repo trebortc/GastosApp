@@ -3,12 +3,28 @@
     x:Class="GastosApp.Mobile.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:GastosApp.Mobile"
-    Title="GastosApp.Mobile">
+    xmlns:views="clr-namespace:GastosApp.Mobile.Views"
+    Title="GastosApp">
 
+    <!-- Rutas de autenticacion (sin tab bar) -->
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        x:Name="LoginShell"
+        Route="login"
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        Shell.NavBarIsVisible="False" />
+
+    <!-- Tabs principales (post-login) -->
+    <TabBar x:Name="MainTabs" Route="main">
+        <Tab Title="Resumen" Icon="chart_icon.png">
+            <ShellContent
+                Route="dashboard"
+                ContentTemplate="{DataTemplate views:DashboardPage}" />
+        </Tab>
+        <Tab Title="Gastos" Icon="expense_icon.png">
+            <ShellContent
+                Route="expenses"
+                ContentTemplate="{DataTemplate views:ExpensesPage}" />
+        </Tab>
+    </TabBar>
 
 </Shell>

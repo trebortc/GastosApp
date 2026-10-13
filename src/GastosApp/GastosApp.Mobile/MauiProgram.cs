@@ -11,7 +11,7 @@ public static class MauiProgram
 #if DEBUG
     public const string ApiBaseUrl = "https://10.0.2.2:7001/"; // Android emulator → localhost
 #else
-    public const string ApiBaseUrl = "https://api.gastosapp.com/";
+    public const string ApiBaseUrl = "https://gastosapp-sx4i.onrender.com";
 #endif
 
     public static MauiApp CreateMauiApp()

@@ -3,10 +3,7 @@ WORKDIR /src
 
 COPY . .
 RUN dotnet restore src/GastosApp/GastosApp.Api/GastosApp.Api.csproj
-RUN dotnet publish src/GastosApp/GastosApp.Api/GastosApp.Api.csproj 
-    -c Release 
-    --no-restore 
-    -o /app/publish
+RUN dotnet publish src/GastosApp/GastosApp.Api/GastosApp.Api.csproj -c Release --no-restore -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app

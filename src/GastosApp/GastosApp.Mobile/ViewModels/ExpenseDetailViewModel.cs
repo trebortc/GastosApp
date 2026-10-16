@@ -88,20 +88,20 @@ public sealed partial class ExpenseDetailViewModel : ObservableObject
             {
                 await _expenses.UpdateAsync(id, new UpdateExpenseRequest(
                     categoryId, Type, Amount, Currency, Description,
-                    new DateTimeOffset(OccurredAt, TimeSpan.Zero)), ct);
+                    new DateTimeOffset(OccurredAt)), ct);
             }
             else
             {
                 await _expenses.CreateAsync(new CreateExpenseRequest(
                     categoryId, Type, Amount, Currency, Description,
-                    new DateTimeOffset(OccurredAt, TimeSpan.Zero)), ct);
+                    new DateTimeOffset(OccurredAt)), ct);
             }
 
             await Shell.Current.GoToAsync("..");
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            ErrorMessage = "No se pudo guardar el gasto.";
+            ErrorMessage = "No se pudo guardar el gasto " + e.Message;
         }
         finally
         {

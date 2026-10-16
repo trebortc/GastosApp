@@ -24,7 +24,10 @@ public sealed class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
         var connectionString =
             Environment.GetEnvironmentVariable("GASTOSAPP_DB")
             ?? configuration.GetConnectionString("Default")
-            ?? "Host=localhost;Port=5432;Database=gastosapp_dev;Username=postgres;Password=1234";
+            ?? "Host=dpg-db6ps5qj9qps73a21fv0-a.oregon-postgres.render.com;Port=5432;Database=gastosapp_c49l;Username=gastosapp_user;Password=Jm5HNkPCiIlbeomQAnLNyN2CcschqnYr;SSL Mode=Require"
+;
+        //?? "Host=localhost;Port=5432;Database=gastosapp_dev;Username=postgres;Password=1234";
+        //"Host=dpg-db6ps5qj9qps73a21fv0-a.oregon-postgres.render.com;Port=5432;Database=gastosapp_c49l;Username=gastosapp_user;Password=Jm5HNkPCiIlbeomQAnLNyN2CcschqnYr;SSL Mode=Require";
 
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseNpgsql(connectionString,

@@ -10,7 +10,7 @@ public static class MauiProgram
     // En desarrollo la API corre en localhost. Cambia esto a tu URL de produccion.
 #if DEBUG
     //public const string ApiBaseUrl = "https://10.0.2.2:7001/"; // Android emulator → localhost
-    public const string ApiBaseUrl = "https://gastosapp-sx4i.onrender.com";
+    public const string ApiBaseUrl = "https://ilzlz3-ip-157-100-202-236.tunnelmole.net";
 #else
     public const string ApiBaseUrl = "https://gastosapp-sx4i.onrender.com";
 #endif

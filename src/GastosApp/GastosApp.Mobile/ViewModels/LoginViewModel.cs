@@ -47,9 +47,9 @@ public sealed partial class LoginViewModel : ObservableObject
                 ? "Correo o contrasena incorrectos."
                 : "Error de conexion. Verifica tu red.";
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            ErrorMessage = "Ocurrio un error inesperado.";
+            ErrorMessage = "Ocurrio un error inesperado. " + e.Message;
         }
         finally
         {

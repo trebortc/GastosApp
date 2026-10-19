@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using System.Web;
+using GastosApp.Application.Categories;
 using GastosApp.Application.Common;
 using GastosApp.Application.Expenses;
 
@@ -47,5 +48,17 @@ public sealed class ExpenseService : IExpenseService
     {
         var response = await _http.DeleteAsync($"api/v1/expenses/{id}", ct);
         response.EnsureSuccessStatusCode();
+    }
+
+    public async Task<PagedResult<CategoryDto>> GetCategoriesAsync(CancellationToken ct = default)
+    {
+        var result = await _http.GetFromJsonAsync<PagedResult<CategoryDto>>("api/v1/expenses/categories", ct);
+        return result ?? new PagedResult<CategoryDto>
+        {
+            Items = [],
+            TotalCount = 0,
+            Page = 1,
+            PageSize = 100
+        };
     }
 }

@@ -8,6 +8,7 @@
     <!-- Marca GastosApp -->
     <Color x:Key="Primary">#2563EB</Color>
     <Color x:Key="PrimaryDark">#1D4ED8</Color>
+    <Color x:Key="PrimaryLight">#DBEAFE</Color>
     <Color x:Key="PrimaryDarkText">#DBEAFE</Color>
     <Color x:Key="Secondary">#64748B</Color>
     <Color x:Key="SecondaryDarkText">#94A3B8</Color>

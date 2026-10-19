@@ -1,4 +1,4 @@
-﻿using GastosApp.Mobile.Services;
+using GastosApp.Mobile.Services;
 using GastosApp.Mobile.ViewModels;
 using GastosApp.Mobile.Views;
 using Microsoft.Extensions.Logging;
@@ -9,8 +9,8 @@ public static class MauiProgram
 {
     // En desarrollo la API corre en localhost. Cambia esto a tu URL de produccion.
 #if DEBUG
-    //public const string ApiBaseUrl = "https://10.0.2.2:7001/"; // Android emulator → localhost
-    public const string ApiBaseUrl = "https://ilzlz3-ip-157-100-202-236.tunnelmole.net";
+    //public const string ApiBaseUrl = "https://10.0.2.2:7001/"; // Android emulator ? localhost
+    public const string ApiBaseUrl = "https://boumln-ip-157-100-202-236.tunnelmole.net";
 #else
     public const string ApiBaseUrl = "https://gastosapp-sx4i.onrender.com";
 #endif
@@ -45,6 +45,7 @@ public static class MauiProgram
 
         builder.Services.AddTransient<IExpenseService, ExpenseService>();
         builder.Services.AddTransient<IReportService, ReportService>();
+        builder.Services.AddTransient<ICategoryService, CategoryService>();
 
         // -- ViewModels --
         builder.Services.AddTransient<LoginViewModel>();
@@ -52,6 +53,8 @@ public static class MauiProgram
         builder.Services.AddTransient<DashboardViewModel>();
         builder.Services.AddTransient<ExpensesViewModel>();
         builder.Services.AddTransient<ExpenseDetailViewModel>();
+        builder.Services.AddTransient<CategoriesViewModel>();
+        builder.Services.AddTransient<CategoryDetailViewModel>();
 
         // -- Pages --
         builder.Services.AddTransient<LoginPage>();
@@ -59,6 +62,8 @@ public static class MauiProgram
         builder.Services.AddTransient<DashboardPage>();
         builder.Services.AddTransient<ExpensesPage>();
         builder.Services.AddTransient<ExpenseDetailPage>();
+        builder.Services.AddTransient<CategoriesPage>();
+        builder.Services.AddTransient<CategoryDetailPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

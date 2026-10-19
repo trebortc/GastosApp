@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <Shell
     x:Class="GastosApp.Mobile.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -6,7 +6,7 @@
     xmlns:views="clr-namespace:GastosApp.Mobile.Views"
     Title="GastosApp">
 
-    <!-- Rutas de autenticacion (sin tab bar) -->
+    <!-- Ruta de autenticacion (sin tab bar) -->
     <ShellContent
         x:Name="LoginShell"
         Route="login"
@@ -24,6 +24,11 @@
             <ShellContent
                 Route="expenses"
                 ContentTemplate="{DataTemplate views:ExpensesPage}" />
+        </Tab>
+        <Tab Title="Categorias" Icon="category_icon.png">
+            <ShellContent
+                Route="categories"
+                ContentTemplate="{DataTemplate views:CategoriesPage}" />
         </Tab>
     </TabBar>
 

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="GastosApp.Mobile.Views.CategoriesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:GastosApp.Mobile.ViewModels"
+    xmlns:dto="clr-namespace:GastosApp.Application.Categories;assembly=GastosApp.Application"
+    x:DataType="vm:CategoriesViewModel"
+    Title="Categorias"
+    BackgroundColor="{AppThemeBinding Light={StaticResource PageBackground}, Dark={StaticResource PageBackgroundDark}}">
+
+    <Shell.ToolbarItems>
+        <ToolbarItem Text="Nueva" Command="{Binding AddCommand}" />
+    </Shell.ToolbarItems>
+
+    <RefreshView Command="{Binding LoadCommand}" IsRefreshing="{Binding IsBusy}">
+        <ScrollView>
+            <VerticalStackLayout Padding="16" Spacing="0">
+
+                <!-- Error -->
+                <Label
+                    Text="{Binding ErrorMessage}"
+                    Style="{StaticResource ErrorLabelStyle}"
+                    IsVisible="{Binding ErrorMessage, Converter={StaticResource NotNullBoolConverter}}"
+                    Margin="0,0,0,8" />
+
+                <!-- Categorias del sistema -->
+                <Label Text="Categorias del sistema" Style="{StaticResource SectionHeaderStyle}" />
+
+                <CollectionView ItemsSource="{Binding SystemCategories}" Margin="0,4,0,16">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dto:CategoryDto">
+                            <Border Style="{StaticResource CardStyle}" Margin="0,4">
+                                <Grid ColumnDefinitions="44,*" ColumnSpacing="12">
+                                    <Border
+                                        Grid.Column="0"
+                                        BackgroundColor="{Binding Color}"
+                                        StrokeShape="RoundRectangle 10"
+                                        StrokeThickness="0"
+                                        HeightRequest="36"
+                                        WidthRequest="36"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            Text="{Binding Icon}"
+                                            FontSize="18"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center" />
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                        <Label Text="{Binding Name}" Style="{StaticResource BodyStyle}" />
+                                        <Label Text="Sistema" Style="{StaticResource CaptionStyle}" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Mis categorias -->
+                <Label Text="Mis categorias" Style="{StaticResource SectionHeaderStyle}" />
+
+                <CollectionView ItemsSource="{Binding PersonalCategories}">
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout HorizontalOptions="Center" Spacing="8" Padding="0,16">
+                            <Label
+                                Text="Aun no tienes categorias personales"
+                                Style="{StaticResource SubtitleStyle}"
+                                HorizontalOptions="Center" />
+                            <Button
+                                Text="Crear la primera"
+                                Command="{Binding AddCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dto:CategoryDto">
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem
+                                            Text="Eliminar"
+                                            BackgroundColor="{StaticResource ErrorColor}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CategoriesViewModel}}, Path=DeleteCommand}"
+                                            CommandParameter="{Binding}" />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+
+                                <Border Style="{StaticResource CardStyle}" Margin="0,4">
+                                    <Grid ColumnDefinitions="44,*,44" ColumnSpacing="12">
+                                        <!-- Icono -->
+                                        <Border
+                                            Grid.Column="0"
+                                            BackgroundColor="{Binding Color}"
+                                            StrokeShape="RoundRectangle 10"
+                                            StrokeThickness="0"
+                                            HeightRequest="36"
+                                            WidthRequest="36"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center">
+                                            <Label
+                                                Text="{Binding Icon}"
+                                                FontSize="18"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center" />
+                                        </Border>
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="{Binding Name}"
+                                            Style="{StaticResource BodyStyle}"
+                                            VerticalOptions="Center" />
+
+                                        <!-- Boton editar -->
+                                        <Button
+                                            Grid.Column="2"
+                                            Text="✏️"
+                                            FontSize="16"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{StaticResource Primary}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CategoriesViewModel}}, Path=EditCommand}"
+                                            CommandParameter="{Binding}"
+                                            HeightRequest="36"
+                                            WidthRequest="36"
+                                            Padding="0"
+                                            VerticalOptions="Center" />
+                                    </Grid>
+                                </Border>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+
+</ContentPage>

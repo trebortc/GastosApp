@@ -1,4 +1,5 @@
 using GastosApp.Api.Extensions;
+using GastosApp.Application.Categories;
 using GastosApp.Application.Common;
 using GastosApp.Application.Expenses;
 using GastosApp.Domain.Entities;
@@ -168,6 +169,32 @@ public sealed class ExpensesController : ControllerBase
         expense.Delete(userId);
         await _db.SaveChangesAsync(ct);
         return NoContent();
+    }
+
+    [HttpGet("categories")]
+    public async Task<ActionResult<PagedResult<CategoryDto>>> GetCategories(CancellationToken ct)
+    {
+        var userId = User.GetUserId();
+
+        var categories = await _db.Categories
+            .Where(c => c.OwnerUserId == userId)
+            .OrderBy(c => c.Name)
+            .Select(c => new CategoryDto(
+                c.Id,
+                c.Name,
+                c.Icon,
+                c.Color,
+                c.OwnerUserId == null, // IsSystem
+                c.OwnerUserId))
+            .ToListAsync(ct);
+
+        return Ok(new PagedResult<CategoryDto>
+        {
+            Items = categories,
+            TotalCount = categories.Count,
+            Page = 1,
+            PageSize = categories.Count
+        });
     }
 
     // -- Helpers --

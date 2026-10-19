@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="GastosApp.Mobile.Views.CategoryDetailPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:GastosApp.Mobile.ViewModels"
+    x:DataType="vm:CategoryDetailViewModel"
+    BackgroundColor="{AppThemeBinding Light={StaticResource PageBackground}, Dark={StaticResource PageBackgroundDark}}">
+
+    <Shell.TitleView>
+        <Label
+            Text="{Binding IsEditMode, Converter={StaticResource BoolToStringConverter},
+                   ConverterParameter='Editar categoria|Nueva categoria'}"
+            Style="{StaticResource NavTitleStyle}" />
+    </Shell.TitleView>
+
+    <Shell.ToolbarItems>
+        <ToolbarItem Text="Guardar" Command="{Binding SaveCommand}" />
+    </Shell.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="0">
+
+            <!-- Preview en tiempo real -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,24" HorizontalOptions="Center" WidthRequest="220">
+                <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
+                    <Border
+                        BackgroundColor="{Binding Color}"
+                        StrokeShape="RoundRectangle 10"
+                        StrokeThickness="0"
+                        HeightRequest="44"
+                        WidthRequest="44">
+                        <Label
+                            Text="{Binding Icon}"
+                            FontSize="22"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center" />
+                    </Border>
+                    <Label
+                        Text="{Binding Name, TargetNullValue='Nombre...'}"
+                        Style="{StaticResource BodyStyle}"
+                        VerticalOptions="Center"
+                        MaximumWidthRequest="130" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- Nombre -->
+            <Label Text="Nombre" Style="{StaticResource FieldLabelStyle}" />
+            <Entry
+                Text="{Binding Name}"
+                Placeholder="Ej: Supermercado, Transporte..."
+                Style="{StaticResource EntryStyle}"
+                Margin="0,4,0,20" />
+
+            <!-- Paleta de colores -->
+            <Label Text="Color" Style="{StaticResource FieldLabelStyle}" />
+            <CollectionView
+                ItemsSource="{Binding ColorPalette}"
+                SelectionMode="Single"
+                SelectedItem="{Binding Color}"
+                HeightRequest="52"
+                Margin="0,4,0,20">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Border
+                            BackgroundColor="{Binding .}"
+                            StrokeShape="RoundRectangle 20"
+                            HeightRequest="40"
+                            WidthRequest="40"
+                            Margin="2">
+                            <Border.Triggers>
+                                <DataTrigger
+                                    TargetType="Border"
+                                    Binding="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=SelectedItem}"
+                                    Value="{Binding .}">
+                                    <Setter Property="Stroke" Value="{StaticResource Primary}" />
+                                    <Setter Property="StrokeThickness" Value="3" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Selector de icono -->
+            <Label Text="Icono" Style="{StaticResource FieldLabelStyle}" />
+            <CollectionView
+                ItemsSource="{Binding IconOptions}"
+                SelectionMode="Single"
+                SelectedItem="{Binding Icon}"
+                HeightRequest="112"
+                Margin="0,4,0,20">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="6" VerticalItemSpacing="4" HorizontalItemSpacing="4" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Border
+                            StrokeShape="RoundRectangle 8"
+                            Padding="6"
+                            HorizontalOptions="Center">
+                            <Border.Triggers>
+                                <DataTrigger
+                                    TargetType="Border"
+                                    Binding="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=SelectedItem}"
+                                    Value="{Binding .}">
+                                    <Setter Property="Stroke" Value="{StaticResource Primary}" />
+                                    <Setter Property="StrokeThickness" Value="2" />
+                                    <Setter Property="BackgroundColor" Value="{StaticResource PrimaryLight}" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <Label
+                                Text="{Binding .}"
+                                FontSize="20"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center" />
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Error -->
+            <Label
+                Text="{Binding ErrorMessage}"
+                Style="{StaticResource ErrorLabelStyle}"
+                IsVisible="{Binding ErrorMessage, Converter={StaticResource NotNullBoolConverter}}"
+                Margin="0,0,0,8" />
+
+            <ActivityIndicator
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                Color="{StaticResource Primary}"
+                Margin="0,8" />
+
+            <Button
+                Text="Cancelar"
+                Command="{Binding CancelCommand}"
+                Style="{StaticResource SecondaryButtonStyle}"
+                Margin="0,8,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

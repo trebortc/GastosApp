@@ -1,3 +1,4 @@
+using GastosApp.Application.Categories;
 using GastosApp.Application.Common;
 using GastosApp.Application.Expenses;
 
@@ -9,4 +10,5 @@ public interface IExpenseService
     Task<ExpenseDto> CreateAsync(CreateExpenseRequest request, CancellationToken ct = default);
     Task UpdateAsync(Guid id, UpdateExpenseRequest request, CancellationToken ct = default);
     Task DeleteAsync(Guid id, CancellationToken ct = default);
+    Task<PagedResult<CategoryDto>> GetCategoriesAsync(CancellationToken ct = default);
 }

@@ -1,8 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GastosApp.Application.Categories;
 using GastosApp.Application.Expenses;
+using GastosApp.Domain.Entities;
 using GastosApp.Domain.Enums;
 using GastosApp.Mobile.Services;
+using System.Collections.ObjectModel;
 
 namespace GastosApp.Mobile.ViewModels;
 
@@ -28,10 +31,29 @@ public sealed partial class ExpenseDetailViewModel : ObservableObject
     [ObservableProperty] private string      _currency    = "MXN";
     [ObservableProperty] private ExpenseType _type        = ExpenseType.Expense;
     [ObservableProperty] private DateTime    _occurredAt  = DateTime.Today;
-
+    [ObservableProperty] private Guid _categoryId = Guid.Empty;
+    //[ObservableProperty] private List<CategoryDto> Categories = new();
+    public ObservableCollection<CategoryDto> Categories { get; } = new ObservableCollection<CategoryDto>();
+    [ObservableProperty] private CategoryDto? selectedCategory;
     public ExpenseDetailViewModel(IExpenseService expenses)
     {
         _expenses = expenses;
+    }
+    // Cargar categorías al inicializar
+    public async Task InitializeAsync(CancellationToken ct)
+    {
+        try
+        {
+            Categories.Clear();
+            var result1 = await _expenses.GetCategoriesAsync(ct);
+
+            foreach (var e in result1.Items)
+                Categories.Add(e);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "No se pudieron cargar las categorías.";
+        }
     }
 
     partial void OnExpenseIdChanged(string? value)
@@ -45,7 +67,8 @@ public sealed partial class ExpenseDetailViewModel : ObservableObject
 
     [RelayCommand]
     private async Task LoadAsync(CancellationToken ct)
-    {
+    {       
+        //Categories = result.Items.ToList();
         if (string.IsNullOrEmpty(ExpenseId)) return;
         IsBusy = true;
         try
@@ -59,6 +82,7 @@ public sealed partial class ExpenseDetailViewModel : ObservableObject
             var expense = result.Items.FirstOrDefault(e => e.Id.ToString() == ExpenseId);
             if (expense is null) return;
 
+            CategoryId = expense.CategoryId;            
             Description = expense.Description;
             Amount      = expense.Amount;
             Currency    = expense.Currency;
@@ -79,21 +103,17 @@ public sealed partial class ExpenseDetailViewModel : ObservableObject
         IsBusy = true;
         ErrorMessage = null;
         try
-        {
-            // CategoryId: se usara un picker en pantalla completa; aqui usamos Guid.Empty como placeholder
-            // hasta que se implemente la seleccion de categoria.
-            var categoryId = Guid.Empty;
-
+        {           
             if (IsEditMode && Guid.TryParse(ExpenseId, out var id))
             {
                 await _expenses.UpdateAsync(id, new UpdateExpenseRequest(
-                    categoryId, Type, Amount, Currency, Description,
+                    SelectedCategory.Id, Type, Amount, Currency, Description,
                     new DateTimeOffset(OccurredAt)), ct);
             }
             else
             {
                 await _expenses.CreateAsync(new CreateExpenseRequest(
-                    categoryId, Type, Amount, Currency, Description,
+                    SelectedCategory.Id, Type, Amount, Currency, Description,
                     new DateTimeOffset(OccurredAt)), ct);
             }
 

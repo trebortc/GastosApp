@@ -1,4 +1,4 @@
-﻿using GastosApp.Mobile.Views;
+using GastosApp.Mobile.Views;
 
 namespace GastosApp.Mobile;
 
@@ -10,7 +10,8 @@ public partial class AppShell : Shell
 
         // Rutas modales / de detalle (no en tab bar)
         Routing.RegisterRoute("register",      typeof(RegisterPage));
-        Routing.RegisterRoute("expensedetail", typeof(ExpenseDetailPage));
+        Routing.RegisterRoute("expensedetail",  typeof(ExpenseDetailPage));
+        Routing.RegisterRoute("categorydetail", typeof(CategoryDetailPage));
     }
 }
 

@@ -52,7 +52,14 @@
                 </Picker.Items>
             </Picker>
 
-            <Label Text="Tipo" Style="{StaticResource FieldLabelStyle}" />
+            <Label Text="Categoría" Style="{StaticResource FieldLabelStyle}" />
+            <Picker                 
+                ItemsSource="{Binding Categories}"
+                ItemDisplayBinding="{Binding Name}"
+                SelectedItem="{Binding SelectedCategory}">
+            </Picker>
+
+                <Label Text="Tipo" Style="{StaticResource FieldLabelStyle}" />
             <Picker
                 Title="Tipo de movimiento"
                 SelectedItem="{Binding Type}"
